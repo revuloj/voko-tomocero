@@ -1,10 +1,10 @@
 #!/bin/sh
-set -x # trace
-# set -e # exit on erros in pipe
+#set -x # trace
 
 # ni evitas sudo / root metante
 # la agordon en dosierujojn de la nuna uzanto
-fetchmailrc=.fetchmailrc
+user=tomocero
+fetchmailrc=/home/${user}/.fetchmailrc
 # certs=${HOME}/etc/certs
 certs=/etc/ssl/certs
 
@@ -21,6 +21,7 @@ if [ ! -e ${fetchmailrc} ]; then
     #mkdir -p ${certs}
     #echo quit | openssl s_client -CApath /etc/ssl/certs/ -connect "${POP3_SERVER}":995 -showcerts > "${certs}/${POP3_SERVER}.cert.pem"
     #c_rehash ${certs}
-    echo "poll ${POP3_SERVER} proto pop3 user \"${POP3_USER}\" password ${POP3_PASSWORD} sslproto TLS1 sslcertck sslcertpath ${certs}" > ${fetchmailrc}
+    echo "poll ${POP3_SERVER} proto pop3 user \"${POP3_USER}\" password ${POP3_PASSWORD} sslproto TLS1 sslcertck sslcertpath ${certs} is ${user}" > ${fetchmailrc}
+    chown ${user} ${fetchmailrc}
     chmod 0400  ${fetchmailrc}
 fi
