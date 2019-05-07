@@ -9,7 +9,8 @@ services:
     command: /usr/lib/postfix/master -d
     volumes:
       # eble ni eksterigu ankaŭ /var/spool/postfix resp. tutan /var/spool
-      - mail:/var/spool/mail
+      - mail:/var/mail
+      - spool:/var/spool
     secrets:
       - voko-tomocero.pop3_server
       - voko-tomocero.pop3_user
@@ -40,6 +41,7 @@ secrets:
 
 volumes:
   mail:
+  spool:
   
 
 

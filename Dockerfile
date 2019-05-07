@@ -1,5 +1,6 @@
 FROM instrumentisto/postfix
 MAINTAINER <diestel@steloj.de>
+#https://wiki.alpinelinux.org/wiki/Hosting_Web/Email_services_on_Alpine#Postfix
 
 RUN apk add --update --no-cache \
         cyrus-sasl fetchmail \
@@ -9,8 +10,11 @@ RUN apk add --update --no-cache \
 COPY bin/* /etc/cont-init.d/
 
 #RUN useradd -ms /bin/ash -u 1074 tomocero
-RUN adduser -D -u 1074 tomocero
+RUN adduser -D -u 1074 tomocero \
+  && mkdir -p /var/mail && touch /var/mail/tomocero && chown tomocero:mail /var/mail/tomocero \
+  && chmod o-r /var/mail/tomocero && chmod g+rw /var/mail/tomocero
 
+# tio jam estas en instrumentisto/postfix
 #ENTRYPOINT ["docker-entrypoint.sh"]
 #CMD ["/usr/lib/postfix/master", "-d"]
 
