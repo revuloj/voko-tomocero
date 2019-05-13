@@ -15,6 +15,8 @@ cat <<EOT > /etc/postfix/main.cf.d/10-custom.cf
     resolve_numeric_domain = yes
     relayhost = ${relayhost}:${relayport}
 
+    local_header_rewrite_clients = permit_inet_interfaces permit_sasl_authenticated
+
     smtp_sasl_auth_enable = yes  
     smtp_sasl_password_maps = hash:/etc/postfix/relay_user
     smtp_sasl_security_options = noanonymous
@@ -74,6 +76,7 @@ chmod 600 /etc/postfix/relay_user
 postmap /etc/postfix/relay_user
 
 echo "root $relayaddress" > /etc/postfix/sender_canonical
+echo "afido@afido $relayaddress" >> /etc/postfix/sender_canonical
 chmod 600 /etc/postfix/sender_canonical
 postmap /etc/postfix/sender_canonical
 
