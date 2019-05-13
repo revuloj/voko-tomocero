@@ -5,13 +5,12 @@ if [ -e /etc/postfix/main.cf.d/10-custom.cf ]; then
 fi
 
 myhostname=$(cat /run/secrets/voko-tomocero.myhostname)
-saslpassword=$(cat /run/secrets/voko-tomocero.saslpassword)
 relayhost=$(cat /run/secrets/voko-tomocero.relayhost)
 relayaddress=$(cat /run/secrets/voko-tomocero.relayaddress)
 relaypassword=$(cat /run/secrets/voko-tomocero.relaypassword)
 relayport=587
 
-cat <<EOT >> /etc/postfix/main.cf.d/10-custom.cf
+cat <<EOT > /etc/postfix/main.cf.d/10-custom.cf
     myhostname = ${myhostname}
     resolve_numeric_domain = yes
     relayhost = ${relayhost}:${relayport}
@@ -47,7 +46,7 @@ cat <<EOT >> /etc/postfix/main.cf.d/10-custom.cf
     smtpd_sasl_security_options = noanonymous
 EOT
 
-cat <<EOT >> /etc/aliases
+cat <<EOT > /etc/aliases
 root:   postfix
 postmaster: postfix
 tomocero@localhost: tomocero
@@ -56,7 +55,7 @@ EOT
 
 newaliases
 
-cat <<EOT >> /etc/postfix/master.cf.d/10-custom.cf
+cat <<EOT > /etc/postfix/master.cf.d/10-custom.cf
 submission inet n       -       y       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_tls_security_level=encrypt
@@ -81,18 +80,4 @@ postmap /etc/postfix/sender_canonical
 #http://www.postfix.org/SASL_README.html
 # create sasldb account
 
-#echo ${sasl_password} | saslpasswd2 -c -u $(postconf -h mydomain) -p tomocero
-echo ${sasl_password} | saslpasswd2 -c -u tomocero -p tomocero
-echo ${sasl_password} | saslpasswd2 -c -u localhost -p tomocero
-sasldblistusers2
 
-mkdir -p /etc/postfix/sasl
-echo <<EOT >> /etc/postfix/sasl/smtpd.conf
-pwcheck_method: auxprop
-auxprop_plugin: sasldb
-mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
-EOT
-
-
-
-#service postfix restart

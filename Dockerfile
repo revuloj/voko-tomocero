@@ -7,7 +7,7 @@ RUN apk add --update --no-cache \
   && rm -rf /var/cache/apk/* 
 
 # vd: https://github.com/just-containers/s6-overlay#executing-initialization-andor-finalization-tasks
-COPY bin/* /etc/cont-init.d/
+COPY init.d/* /etc/cont-init.d/
 
 #RUN useradd -ms /bin/ash -u 1074 tomocero
 RUN adduser -D -u 1074 tomocero \
