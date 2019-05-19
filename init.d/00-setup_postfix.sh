@@ -10,6 +10,9 @@ relayaddress=$(cat /run/secrets/voko-tomocero.relayaddress)
 relaypassword=$(cat /run/secrets/voko-tomocero.relaypassword)
 relayport=587
 
+# set sticky bit: 1000 (t)
+chmod 1777 /var/mail
+
 cat <<EOT > /etc/postfix/main.cf.d/10-custom.cf
     myhostname = ${myhostname}
     resolve_numeric_domain = yes
