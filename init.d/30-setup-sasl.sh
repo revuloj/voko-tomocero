@@ -9,7 +9,7 @@ chgrp postfix /etc/sasldb2
 sasldblistusers2
 
 mkdir -p /etc/postfix/sasl
-echo <<EOT > /etc/postfix/sasl/smtpd.conf
+cat <<EOT > /etc/postfix/sasl/smtpd.conf
 pwcheck_method: auxprop
 auxprop_plugin: sasldb
 mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
